@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>Graph Rendering</title>
+<style>
+body {
+				font-family: helvetica;
+				font-size: 10px;
+			}
+			#cy {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				z-index: 999;
+			}
+			h1 {
+				opacity: 0.5;
+				font-size: 1em;
+			}
+</style>
+</head>
+<body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-2.4.7/arbor.js"></script>
+<!-- <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-2.4.7/cytoscape.js"></script> -->
+<script src="./cytoscape.js"></script>
+<!-- <script src="./arbor.js"></script> -->
+<script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.js"></script>
+<script>	$(function(){
+				var cy = window.cy = cytoscape({
+					container: document.getElementById('cy'),
+					boxSelectionEnabled: false,
+					autounselectify: true,
+					avoidoverlap:true,
+					fit: true,
+					layout: {
+						name: 'concentricFlower',
+   concentric: function(data) {
+     if (this.data('id') === "n0") {
+      return 4;
+     } else if (this.data("id") === "n1"||this.data("id") === "n2"||this.data("id") === "n15"||
+     	this.data("id") === "n16"||this.data("id") === "n21"||this.data("id") === "n22"||this.data("id") === "n23"
+     	||this.data("id") === "n24") {
+      return 3;
+     } 
+     // else if (this.data("id") === "n6") {
+     //  return 2;
+     // } 
+     else {
+      return 1;
+     }
+    },
+    levelWidth: function() {
+     return 1;
+    }
+					},
+         
+					style: [
+						{
+							selector: 'node',
+							style: {
+								'content': 'data(id)',
+								'text-opacity': 0.5,
+								'text-valign': 'center',
+								'text-halign': 'center',
+								'font-size':6,
+								'background-color': '#11479e',
+								'z-index': 10,
+								"width": 6,
+								"height": 6,
+							}
+						},
+						{
+							selector: 'edge',
+							style: {
+								'width': 1,
+								// 'target-arrow-shape': 'triangle',
+								'line-color': '#9dbaea',
+								'target-arrow-color': '#9dbaea'
+							}
+						}
+					],
+					elements: {
+						nodes: [
+							{ data: { id: 'n0' } },
+							{ data: { id: 'n1' } },
+							{ data: { id: 'n2' } },
+							{ data: { id: 'n3' } },
+							{ data: { id: 'n4' } },
+							{ data: { id: 'n5' } },
+							{ data: { id: 'n6' } },
+							{ data: { id: 'n7' } },
+							{ data: { id: 'n8' } },
+							{ data: { id: 'n9' } },
+							{ data: { id: 'n10' } },
+							{ data: { id: 'n11' } },
+							{ data: { id: 'n12' } },
+							{ data: { id: 'n13' } },
+							{ data: { id: 'n14' } },
+							{ data: { id: 'n15' } },
+							{ data: { id: 'n16' } },
+							{ data: { id: 'n17' } },
+							{ data: { id: 'n18' } },
+							{ data: { id: 'n19' } },
+							{ data: { id: 'n20' } },
+							{ data: { id: 'n21' } },
+							{ data: { id: 'n22' } },
+							{ data: { id: 'n23' } },
+							{ data: { id: 'n24' } },
+							{ data: { id: 'n25' } },
+							{ data: { id: 'n26' } },
+							{ data: { id: 'n27' } },
+							{ data: { id: 'n28' } },
+							{ data: { id: 'n29' } },
+							{ data: { id: 'n30' } },
+							{ data: { id: 'n31' } },
+							// { data: { id: 'n21' } }
+						],
+						edges: [
+							{ data: { source: 'n0', target: 'n1' } },
+							{ data: { source: 'n2', target: 'n0' } },
+							{ data: { source: 'n0', target: 'n15' } },
+							{ data: { source: 'n0', target: 'n16' } },
+							{ data: { source: 'n0', target: 'n21' } },
+							{ data: { source: 'n0', target: 'n22' } },
+							{ data: { source: 'n0', target: 'n23' } },
+							{ data: { source: 'n0', target: 'n24' } },
+
+							{ data: { source: 'n1', target: 'n3' } },
+							{ data: { source: 'n4', target: 'n1' } },
+							{ data: { source: 'n1', target: 'n5' } },
+							{ data: { source: 'n1', target: 'n6' } },
+							{ data: { source: 'n1', target: 'n7' } },
+							{ data: { source: 'n1', target: 'n8' } },
+
+
+							{ data: { source: 'n2', target: 'n9' } },
+							{ data: { source: 'n2', target: 'n12' } },
+							{ data: { source: 'n13', target: 'n2' } },
+							{ data: { source: 'n11', target: 'n2' } },
+							{ data: { source: 'n2', target: 'n14' } },
+							{ data: { source: 'n10', target: 'n2' } },
+
+
+							{ data: { source: 'n15', target: 'n17' } },
+							// { data: { source: 'n15', target: 'n21' } },
+
+							{ data: { source: 'n18', target: 'n16' } },							
+							{ data: { source: 'n19', target: 'n16' } },							
+							{ data: { source: 'n20', target: 'n16' } },							
+
+							{ data: { source: 'n21', target: 'n25' } },							
+							{ data: { source: 'n22', target: 'n26' } },							
+							{ data: { source: 'n23', target: 'n27' } },
+
+							{ data: { source: 'n24', target: 'n28' } },							
+							{ data: { source: 'n24', target: 'n29' } },							
+							{ data: { source: 'n24', target: 'n30' } },							
+							{ data: { source: 'n24', target: 'n31' } },							
+
+
+						]
+					},
+				});
+			});</script>
+  <h1>cytoscape-dagre demo</h1>
+
+		<div id="cy"></div>
+</body>
