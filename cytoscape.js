@@ -3873,10 +3873,10 @@ this.cytoscape = cytoscape;
         if( propertiesEmpty ){
           return this; // nothing to animate
         }
-        
+
         if( isEles ){
           properties.style = style.getPropsList( properties.style || properties.css );
-          
+
           properties.css = undefined;
         }
 
@@ -10665,7 +10665,7 @@ this.cytoscape = cytoscape;
 
 })( cytoscape );
 
-;(function($$) { 
+;(function($$) {
   'use strict';
 
   // Additional graph analysis algorithms
@@ -23890,7 +23890,7 @@ this.cytoscape = cytoscape;
     var allEdges = eles.edges();
     console.log(allEdges);
     var flowerElementsMap = {};
-
+    var nodEdgeNodes;
     for( var i = 0; i < levels.length; i++ ){
       var level = levels[i];
       var dTheta = 2 * Math.PI / level.length;
@@ -23920,10 +23920,12 @@ this.cytoscape = cytoscape;
         else
         {
           var edgeIndex = 0;
+
           for(edgeIndex=0;edgeIndex<allEdges.length;edgeIndex++)
           {
-            // console.log("current node ",val.node.id());   
+            // console.log("current node ",val.node.id());
                 //success
+            var noEdgeFlag = 0;
             if(allEdges[edgeIndex]["_private"]["target"]["_private"]["data"]["id"] == val.node.id()||
               allEdges[edgeIndex]["_private"]["source"]["_private"]["data"]["id"] == val.node.id())
             {
@@ -23933,11 +23935,11 @@ this.cytoscape = cytoscape;
               {
                 console.log("Match found at target");
                 console.log("Position of the parent at ",pos[sourceId]);
-                
+                noEdgeFlag = 1;
                 var parentTheta = options.startAngle + (options.counterclockwise ? -1 : 1) * dTheta * (j-1);
                 var childPosition = {
-                  x : pos[sourceId].x + minDist*Math.cos(parentTheta),
-                  y : pos[sourceId].y + minDist*Math.sin(parentTheta),
+                  x : pos[sourceId].x + (minDist/2)*Math.cos(parentTheta),
+                  y : pos[sourceId].y + (minDist/2)*Math.sin(parentTheta),
                   parentTheta : parentTheta,
                   id : val.node.id(),
                   parentid:sourceId
@@ -23949,12 +23951,12 @@ this.cytoscape = cytoscape;
               {
                 console.log("Match found at source");
                 console.log("Position of the parent at ",pos[targetId]);
-                
+
                 var parentTheta = options.startAngle + (options.counterclockwise ? -1 : 1) * dTheta * (j-1);
-                
+                noEdgeFlag = 1;
                 var childPosition = {
-                  x : pos[targetId].x + minDist*Math.cos(parentTheta),
-                  y : pos[targetId].y + minDist*Math.sin(parentTheta),
+                  x : pos[targetId].x + (minDist/2)*Math.cos(parentTheta),
+                  y : pos[targetId].y + (minDist/2)*Math.sin(parentTheta),
                   parentTheta : parentTheta,
                   id : val.node.id(),
                   parentid:targetId
@@ -23963,6 +23965,17 @@ this.cytoscape = cytoscape;
                 continue;
               }
             }
+          }
+          if(noEdgeFlag === 0)
+          {
+          console.log("no edge node");
+          var theta = options.startAngle + (options.counterclockwise ? -1 : 1) * dTheta * j;
+          var p = {
+            x: center.x + (r+5*minDist/3) * Math.cos(theta),
+            y: center.y + (r+5*minDist/3) * Math.sin(theta)
+            };
+          pos[ val.node.id() ] = p;
+
           }
         }
       }
@@ -23979,39 +23992,48 @@ this.cytoscape = cytoscape;
       {
         arc = 60;
       }
-      
-      // convert degrees to radians      
+
+      // convert degrees to radians
       arc = arc * Math.PI/180;
       var parentKeys = Object.keys(flowerElementsMap);
+      var endArc;
       for(var z=0;z<parentKeys.length;z++)
       {
         var parentMap = flowerElementsMap[parentKeys[z]];
         var childrenCount = parentMap.length;
         var angleIncrease = arc/childrenCount;
         var childrenStartAngle = parentMap[0].parentTheta-(arc/2);
+        if(z!=0){
+          childrenStartAngle = endArc;
+        }
 
         console.log("r",r);
+        if(childrenCount>1){
+          for(var childIndex=0;childIndex<childrenCount;childIndex++)
+          {
+            var p = {
+              x : center.x + r* Math.cos(childrenStartAngle + childIndex*angleIncrease),
+              y : center.y + r* Math.sin(childrenStartAngle + childIndex*angleIncrease)
+            };
+            pos[ parentMap[childIndex].id ] = p;
+          }
+        }
 
-        for(var childIndex=0;childIndex<childrenCount;childIndex++)
+        else if(childrenCount==1)
         {
+          console.log("single child parent");
           var p = {
-            x : center.x + r * Math.cos(childrenStartAngle + childIndex*angleIncrease),
-            y : center.y + r * Math.sin(childrenStartAngle + childIndex*angleIncrease)
+            x : center.x + r*Math.cos(childrenStartAngle + arc/2),
+            y : center.y + r*Math.sin(childrenStartAngle + arc/2)
           };
-          pos[ parentMap[childIndex].id ] = p;
+          console.log("p",p)
+          pos[parentMap[0].id] = p;
         }
-        if(childrenCount==1)
-        {
-          var p = {
-            x : center.x + r * Math.cos(childrenStartAngle + arc/2), 
-            y : center.y + r * Math.sin(childrenStartAngle + arc/2)
-          };
-          pos[ parentMap[0]] = p;
-        }
+        endArc = childrenStartAngle + arc;
       }
       console.log("position map ",pos);
     }
-    
+
     function populateFlower(parentId,childPosition)
       {
         var flag = 0;
@@ -24020,7 +24042,7 @@ this.cytoscape = cytoscape;
         }
         else{
           flowerElementsMap[parentId] = [];
-          flowerElementsMap[parentId].push(childPosition); 
+          flowerElementsMap[parentId].push(childPosition);
         }
         console.log("flowerElementsMap",flowerElementsMap);
         return;
