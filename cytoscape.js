@@ -23902,6 +23902,11 @@ this.cytoscape = cytoscape;
         var dsin = Math.sin(dTheta) - Math.sin(0);
         var rMin = Math.sqrt( minDist * minDist / ( dcos*dcos + dsin*dsin ) ); // s.t. no nodes overlapping
         r = Math.max( rMin, r );
+         
+        // //identifying parent with no node  
+        // for(edgeIndex=0;edgeIndex<allEdges.length;edgeIndex++){
+          
+        // }        
       }
 
       for( var j = 0; j < level.length; j++ ){
@@ -23915,6 +23920,7 @@ this.cytoscape = cytoscape;
             y: center.y + r * Math.sin(theta)
             };
           pos[ val.node.id() ] = p;
+          console.log("Inner Node rendered at ",p);
           // console.log(val.node.id()," radius ",r);
         }
         else
@@ -23933,8 +23939,8 @@ this.cytoscape = cytoscape;
               var sourceId = allEdges[edgeIndex]["_private"]["source"]["_private"]["data"]["id"];
               if(targetId == val.node.id())
               {
-                console.log("Match found at target");
-                console.log("Position of the parent at ",pos[sourceId]);
+                console.log("outer Node being rendered at target");
+                // console.log("Position of the parent at ",pos[sourceId]);
                 noEdgeFlag = 1;
                 var parentTheta = options.startAngle + (options.counterclockwise ? -1 : 1) * dTheta * (j-1);
                 var childPosition = {
@@ -23949,8 +23955,8 @@ this.cytoscape = cytoscape;
               }
               else if(sourceId == val.node.id())
               {
-                console.log("Match found at source");
-                console.log("Position of the parent at ",pos[targetId]);
+                console.log("Outer Node being rendered at source");
+                // console.log("Position of the parent at ",pos[targetId]);
 
                 var parentTheta = options.startAngle + (options.counterclockwise ? -1 : 1) * dTheta * (j-1);
                 noEdgeFlag = 1;
@@ -23966,16 +23972,16 @@ this.cytoscape = cytoscape;
               }
             }
           }
+
           if(noEdgeFlag === 0)
           {
-          console.log("no edge node");
+          // console.log("no edge node rendered");
           var theta = options.startAngle + (options.counterclockwise ? -1 : 1) * dTheta * j;
           var p = {
             x: center.x + (r+5*minDist/3) * Math.cos(theta),
             y: center.y + (r+5*minDist/3) * Math.sin(theta)
             };
-          pos[ val.node.id() ] = p;
-
+            pos[ val.node.id() ] = p;
           }
         }
       }
@@ -23987,7 +23993,7 @@ this.cytoscape = cytoscape;
       // console.log("i=levels.length");
       var previusLevelCount = levels[i-1].length;
       var arc = 360/(previusLevelCount);
-      console.log("arc",arc);
+      // console.log("arc",arc);
       if(arc>60)
       {
         arc = 60;
@@ -23997,41 +24003,41 @@ this.cytoscape = cytoscape;
       arc = arc * Math.PI/180;
       var parentKeys = Object.keys(flowerElementsMap);
       var endArc;
+      console.log("center",center);
+      
       for(var z=0;z<parentKeys.length;z++)
       {
         var parentMap = flowerElementsMap[parentKeys[z]];
         var childrenCount = parentMap.length;
-        var angleIncrease = arc/childrenCount;
+        // var angleIncrease = arc/childrenCount;
         var childrenStartAngle = parentMap[0].parentTheta-(arc/2);
+        // var parentArcLength = (2*Math.PI*r)/childrenCount;
+        var childNodeWidth = nodes[0]["_private"]["style"]["width"].value;
+        // console.log("width",nodes[0]["_private"]["style"]["width"].value);
         if(z!=0){
           childrenStartAngle = endArc;
         }
 
-        console.log("r",r);
         if(childrenCount>1){
-          for(var childIndex=0;childIndex<childrenCount;childIndex++)
-          {
-            var p = {
-              x : center.x + r* Math.cos(childrenStartAngle + childIndex*angleIncrease),
-              y : center.y + r* Math.sin(childrenStartAngle + childIndex*angleIncrease)
-            };
-            pos[ parentMap[childIndex].id ] = p;
-          }
+          console.log("More than one children");
+
+          plotBalloon(r/2,childrenStartAngle,arc,parentMap,childNodeWidth,0);
+
         }
 
         else if(childrenCount==1)
         {
-          console.log("single child parent");
+          // console.log("single child parent");
           var p = {
-            x : center.x + r*Math.cos(childrenStartAngle + arc/2),
-            y : center.y + r*Math.sin(childrenStartAngle + arc/2)
+            x : center.x + (r/2)*Math.cos(childrenStartAngle + arc/2),
+            y : center.y + (r/2)*Math.sin(childrenStartAngle + arc/2)
           };
-          console.log("p",p)
+          // console.log("p",p)
           pos[parentMap[0].id] = p;
         }
         endArc = childrenStartAngle + arc;
       }
-      console.log("position map ",pos);
+      // console.log("position map ",pos);
     }
 
     function populateFlower(parentId,childPosition)
@@ -24044,15 +24050,79 @@ this.cytoscape = cytoscape;
           flowerElementsMap[parentId] = [];
           flowerElementsMap[parentId].push(childPosition);
         }
-        console.log("flowerElementsMap",flowerElementsMap);
+        // console.log("flowerElementsMap",flowerElementsMap);
+        // console.log("Flower Populated");
         return;
       }
+    }
+
+    function plotBalloon(R,childrenStartAngle,arc,parentMap,childNodeWidth,toPlotIndex){
+      // console.log("FROM PLOT BALLOON for node ");
+      console.log(".......................................................................");
+      console.log("Data Recieved for parent node :",parentMap[0].parentid, "\nRadius",R,
+        "\nchildrenStartAngle:"+childrenStartAngle+"\nArc in radians",arc,
+        "\nparentMap:",parentMap,"\nchlidNodeWidth:",childNodeWidth,"\ntoPlotIndex:",toPlotIndex);
+      // var childrenCount = parentMap.length;
+      // var parentArcLength = (arc/(2*Math.PI))*2*Math.PI*R;
+      // var parentArcLength = arc*R;
+      // var nodesSupported = Math.floor(parentArcLength/(1.5*childNodeWidth));
+      var angleIncrease = arc/(1.5*nodesSupported);
+      // var nodesToPlot =  
+      // var toPlotIndex = nodesPlotCount;
+      // console.log("nodes supported ",nodesSupported,"\toPlotIndex ",toPlotIndex);
+      //1.5 multiplier is to allow spacing between the nodes
+      // var iterationIndex = 0;
+      // var totalNodes = parentMap.length;
+      var remainderNodes = parentMap.length;
+      var nodeIndex = 0;
+
+      // for(var i=0;i<parentMap.length;i++){
+        while(remainderNodes>0){
+        var parentArcLength = arc*R;
+        var nodesSupported = Math.floor(parentArcLength/(1.5*childNodeWidth));
+        var angleIncrease = arc/(1.5*nodesSupported);
+        for(var j=0;j<nodesSupported;j++){
+          if(parentMap[nodeIndex]){
+          var p = {
+            x : center.x + R*Math.cos(childrenStartAngle + j*angleIncrease),
+            y : center.y + R*Math.sin(childrenStartAngle + j*angleIncrease)
+           };
+          pos[parentMap[nodeIndex++].id]=p;
+          // console.log("Node rendered:",parentMap[nodeIndex].id)   
+          remainderNodes--;  
+          }
+        }
+        R=R+minDist;
+      }
+
+      // while(toPlotIndex!=parentMap.length && nodesSupported!=0){
+      //   var p = {
+      //     x : center.x + R * Math.cos(childrenStartAngle + iterationIndex*angleIncrease),
+      //     y : center.y + R * Math.sin(childrenStartAngle + iterationIndex*angleIncrease)
+      //   };        
+      //   pos[parentMap[toPlotIndex]];
+      //   console.log("node",parentMap[toPlotIndex].id," at ",p);
+      //   // console.log("node",parentMap[toPlotIndex].id," redered for parent ",parentMap[toP].parentid,);
+      //   nodesSupported--;
+      //   toPlotIndex++;
+      //   iterationIndex++;
+
+      // }
+      // if(toPlotIndex!=parentMap.length){
+      //   R = R + (1.5)*minDist;
+      //   childNodeWidth = childNodeWidth*(0.6);
+      //   // toPlotIndex = toPlotIndex;
+      //   plotBalloon(R,childrenStartAngle,arc,parentMap,childNodeWidth,toPlotIndex);
+      // }
+      // else{
+      //   console.log("Nodes ready");
+      // }
     }
 
     // position the nodes
     nodes.layoutPositions(this, options, function(){
       var id = this.id();
-
+      console.log("nodes rendered");
       return pos[id];
     });
 

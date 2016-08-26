@@ -40,18 +40,19 @@ body {
 					boxSelectionEnabled: false,
 					autounselectify: true,
 					avoidoverlap:true,
+					fit: true,
 					layout: {
-						name: 'concentric',
+						name: 'concentricFlower',
    concentric: function(data) {
      if (this.data('id') === "n0") {
       return 4;
-     } else if (this.data("id") === "n1"||this.data("id") === "n2"||this.data("id") === "n15"||
-     	this.data("id") === "n16"||this.data("id") === "n21"||this.data("id") === "n22") {
+     } else if (this.data("id") === "n1"||this.data("id") === "n2"||this.data("id") === "n3"||
+     	this.data("id") === "n4"||this.data("id") === "n5"||this.data("id") === "n6"||this.data("id") === "n7") {
       return 3;
-     } 
+     }
      // else if (this.data("id") === "n6") {
      //  return 2;
-     // } 
+     // }
      else {
       return 1;
      }
@@ -60,7 +61,7 @@ body {
      return 1;
     }
 					},
-         
+
 					style: [
 						{
 							selector: 'node',
@@ -69,15 +70,18 @@ body {
 								'text-opacity': 0.5,
 								'text-valign': 'center',
 								'text-halign': 'center',
+								'font-size':6,
 								'background-color': '#11479e',
-								'z-index': 10
+								'z-index': 10,
+								"width": 10,
+								"height": 10,
 							}
 						},
 						{
 							selector: 'edge',
 							style: {
-								'width': 4,
-								'target-arrow-shape': 'triangle',
+								'width': 1,
+								// 'target-arrow-shape': 'triangle',
 								'line-color': '#9dbaea',
 								'target-arrow-color': '#9dbaea'
 							}
@@ -108,59 +112,98 @@ body {
 							{ data: { id: 'n20' } },
 							{ data: { id: 'n21' } },
 							{ data: { id: 'n22' } },
-							// { data: { id: 'n23' } },
-							// { data: { id: 'n24' } },
-							// { data: { id: 'n25' } },
-							// { data: { id: 'n26' } },
-							// { data: { id: 'n27' } },
-							// { data: { id: 'n28' } },
-							// { data: { id: 'n29' } },
-							// { data: { id: 'n30' } },
-							
-							// { data: { id: 'n21' } }
+							{ data: { id: 'n23' } },
+							{ data: { id: 'n24' } },
+							{ data: { id: 'n25' } },
+							{ data: { id: 'n26' } },
+							{ data: { id: 'n27' } },
+							{ data: { id: 'n28' } },
+							{ data: { id: 'n29' } },
+							{ data: { id: 'n30' } },
+							{ data: { id: 'n31' } },
+							{ data: { id: 'n32' } },
+							{ data: { id: 'n33' } },
+							{ data: { id: 'n34' } },
+							{ data: { id: 'n35' } },
+							{ data: { id: 'n36' } },
+							{ data: { id: 'n37' } },
+							{ data: { id: 'n38' } },
+							{ data: { id: 'n39' } },
+							{ data: { id: 'n40' } },
+							{ data: { id: 'n41' } },
+							{ data: { id: 'n42' } },
+							{ data: { id: 'n43' } },
+							{ data: { id: 'n44' } },
+							{ data: { id: 'n45' } },
+							{ data: { id: 'n46' } },
+							{ data: { id: 'n47' } },
+							{ data: { id: 'n48' } },
+							{ data: { id: 'n49' } },
+							{ data: { id: 'n50' } },
+							// { data: { id: 'n72' } },
+							// { data:	{ id: 'n90' } }
 						],
 						edges: [
 							{ data: { source: 'n0', target: 'n1' } },
 							{ data: { source: 'n2', target: 'n0' } },
-							{ data: { source: 'n0', target: 'n15' } },
-							{ data: { source: 'n0', target: 'n16' } },
-							{ data: { source: 'n0', target: 'n21' } },
-							{ data: { source: 'n0', target: 'n22' } },
-							{ data: { source: 'n0', target: 'n23' } },
-							{ data: { source: 'n0', target: 'n24' } },
+							{ data: { source: 'n0', target: 'n3' } },
+							{ data: { source: 'n0', target: 'n4' } },
+							{ data: { source: 'n0', target: 'n5' } },
+							{ data: { source: 'n0', target: 'n6' } },
+							{ data: { source: 'n0', target: 'n7' } },
 
-							{ data: { source: 'n1', target: 'n3' } },
-							{ data: { source: 'n4', target: 'n1' } },
-							{ data: { source: 'n1', target: 'n5' } },
-							{ data: { source: 'n1', target: 'n6' } },
-							{ data: { source: 'n1', target: 'n7' } },
+
+							// { data: { source: 'n1', target: 'n6' } },
+							// { data: { source: 'n1', target: 'n7' } },
 							{ data: { source: 'n1', target: 'n8' } },
+							{ data: { source: 'n1', target: 'n9' } },
+							{ data: { source: 'n1', target: 'n10' } },
 
+							{ data: { source: 'n1', target: 'n11' } },
+							{ data: { source: 'n1', target: 'n12' } },
+							{ data: { source: 'n1', target: 'n13' } },
+							{ data: { source: 'n1', target: 'n14' } },
+							{ data: { source: 'n1', target: 'n15' } },
 
-							{ data: { source: 'n2', target: 'n9' } },
-							{ data: { source: 'n2', target: 'n12' } },
-							{ data: { source: 'n13', target: 'n2' } },
-							{ data: { source: 'n11', target: 'n2' } },
-							{ data: { source: 'n2', target: 'n14' } },
-							{ data: { source: 'n10', target: 'n2' } },
+							{ data: { source: 'n6', target: 'n16' } },
+							{ data: { source: 'n2', target: 'n17' } },
+							{ data: { source: 'n2', target: 'n18' } },
+							{ data: { source: 'n2', target: 'n19' } },
+							{ data: { source: 'n2', target: 'n20' } },
 
+							{ data: { source: 'n2', target: 'n21' } },
+							{ data: { source: 'n2', target: 'n22' } },
+							{ data: { source: 'n2', target: 'n23' } },
+							{ data: { source: 'n7', target: 'n24' } },
+							{ data: { source: 'n2', target: 'n25' } },
 
-							{ data: { source: 'n15', target: 'n17' } },
-							// { data: { source: 'n15', target: 'n21' } },
+							{ data: { source: 'n2', target: 'n26' } },
+							{ data: { source: 'n2', target: 'n27' } },
+							{ data: { source: 'n6', target: 'n28' } },
+							{ data: { source: 'n2', target: 'n29' } },
+							{ data: { source: 'n2', target: 'n30' } },
 
-							{ data: { source: 'n18', target: 'n16' } },							
-							{ data: { source: 'n19', target: 'n16' } },							
-							{ data: { source: 'n20', target: 'n16' } },							
+							{ data: { source: 'n3', target: 'n31' } },
+							{ data: { source: 'n6', target: 'n32' } },
+							{ data: { source: 'n3', target: 'n33' } },
+							{ data: { source: 'n3', target: 'n34' } },
+							{ data: { source: 'n3', target: 'n35' } },
+							{ data: { source: 'n4', target: 'n36' } },
+							{ data: { source: 'n4', target: 'n37' } },
+							{ data: { source: 'n4', target: 'n38' } },
+							{ data: { source: 'n4', target: 'n39' } },
+							{ data: { source: 'n4', target: 'n40' } },
+							{ data: { source: 'n4', target: 'n41' } },
+							{ data: { source: 'n6', target: 'n42' } },
+							{ data: { source: 'n5', target: 'n43' } },
+							{ data: { source: 'n5', target: 'n44' } },
+							{ data: { source: 'n5', target: 'n45' } },
 
-							{ data: { source: 'n21', target: 'n25' } },							
-							{ data: { source: 'n22', target: 'n26' } },							
-							// { data: { source: 'n23', target: 'n27' } },
-
-							// { data: { source: 'n24', target: 'n28' } },							
-							// { data: { source: 'n24', target: 'n29' } },							
-							// { data: { source: 'n24', target: 'n30' } },							
-							
-
+							{ data: { source: 'n5', target: 'n46' } },
+							{ data: { source: 'n5', target: 'n47' } },
+							{ data: { source: 'n7', target: 'n48' } },
+							{ data: { source: 'n7', target: 'n49' } },
+							{ data: { source: 'n7', target: 'n50' } },
 
 						]
 					},
